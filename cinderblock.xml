@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+  name="Simple Scene Graph"
+  id= "uk.nocte.simplescenegraph"
+  git="git@github.com:q-depot/SimpleSceneGraph.git"
+  author="Paul Houx, Andrea Cuius"
+  summary="Simple Scene Graph Cinder block"
+  >
+  <supports os="macosx" />
+  <supports os="ios" />
+  <supports os="msw" />
+
+  <headerPattern>src/Node.h</headerPattern>
+  <sourcePattern>src/Node.cpp</sourcePattern>
+
+  <includePath>src/</includePath>
+
+</block>
+</cinder>
