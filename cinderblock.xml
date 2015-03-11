@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cinder>
 <block
-  name="Simple Scene Graph"
-  id= "uk.nocte.simplescenegraph"
-  git="git@github.com:q-depot/SimpleSceneGraph.git"
+  name="Cinder-SSG"
+  id= "uk.nocte.ssg"
+  git="git@github.com:q-depot/Cinder-SSG.git"
   author="Paul Houx, Andrea Cuius"
-  summary="Simple Scene Graph Cinder block"
+  summary="Cinder Simple Scene Graph"
   >
   <supports os="macosx" />
   <supports os="ios" />
