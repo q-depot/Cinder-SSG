@@ -20,7 +20,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "nodes/Node.h"
+#include "Node.h"
 #include "cinder/app/AppBasic.h"
 
 using namespace ci;
@@ -116,13 +116,13 @@ bool Node::hasChild(NodeRef node) const
 	return(itr != mChildren.end());
 }
 
-void Node::putOnTop()
+void Node::putOnTop(bool recursive)
 {
 	NodeRef parent = getParent();
-	if(parent) parent->putOnTop( shared_from_this() );
+	if(parent) parent->putOnTop( shared_from_this(), recursive );
 }
 
-void Node::putOnTop(NodeRef node)
+void Node::putOnTop(NodeRef node, bool recursive)
 {
 	// remove from list
 	NodeList::iterator itr = std::find(mChildren.begin(), mChildren.end(), node);
@@ -132,6 +132,13 @@ void Node::putOnTop(NodeRef node)
 
 	// add to end of list
 	mChildren.push_back(node);
+
+	if (recursive)
+	{
+		NodeRef parent = getParent();
+		if (parent)
+			parent->putOnTop(shared_from_this(), true);
+	}
 }
 
 bool Node::isOnTop() const 
@@ -569,7 +576,7 @@ void Node3D::treeDrawWireframe()
 	NodeList::iterator itr;
 	for(itr=mChildren.begin();itr!=mChildren.end();++itr) {
 		// only call other Node3D's
-		Node3DRef node = boost::dynamic_pointer_cast<Node3D>(*itr);
+		Node3DRef node = std::dynamic_pointer_cast<Node3D>(*itr);
 		if(node) node->treeDrawWireframe();
 	}
 	

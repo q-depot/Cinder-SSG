@@ -45,14 +45,14 @@ namespace cinder {
 
 namespace ph { namespace nodes {
 
-typedef boost::shared_ptr<class Node>		NodeRef;
-typedef boost::shared_ptr<const class Node>	NodeConstRef;
-typedef boost::weak_ptr<class Node>			NodeWeakRef;
+typedef std::shared_ptr<class Node>		NodeRef;
+typedef std::shared_ptr<const class Node>	NodeConstRef;
+typedef std::weak_ptr<class Node>			NodeWeakRef;
 typedef std::deque<NodeRef>					NodeList;
 typedef std::map<unsigned int, NodeWeakRef>	NodeMap;
 
 class Node
-	: public boost::enable_shared_from_this<Node>
+	: public std::enable_shared_from_this<Node>
 {
 public:
 	Node(void);
@@ -64,13 +64,13 @@ public:
 	NodeRef	getParent() const { return mParent.lock(); }
 	//! returns the node's parent node (provide a templated function for easier down-casting of nodes)
 	template <class T>
-	boost::shared_ptr<T>	getParent() const { 
-		return boost::dynamic_pointer_cast<T>(mParent.lock()); 
+	std::shared_ptr<T>	getParent() const { 
+		return std::dynamic_pointer_cast<T>(mParent.lock()); 
 	}
 	//! returns a node higher up in the hierarchy of the desired type, if any
 	template <class T>
-	boost::shared_ptr<T>	getTreeParent() const { 
-		boost::shared_ptr<T> node = boost::dynamic_pointer_cast<T>(mParent.lock()); 
+	std::shared_ptr<T>	getTreeParent() const { 
+		std::shared_ptr<T> node = std::dynamic_pointer_cast<T>(mParent.lock()); 
 		if(node) 
 			return node;
 		else if(mParent.lock()) 
@@ -98,7 +98,7 @@ public:
 	//! removes all children of this node
 	void removeChildren();
 	//! puts a specific child on top of all other children of this node
-	void putOnTop(NodeRef node);
+	void putOnTop(NodeRef node, bool recursive);
 	//! returns wether a specific child is on top of all other children
 	bool isOnTop(NodeConstRef node) const ;		
 	//! puts a specific child below all other children of this node
@@ -106,11 +106,11 @@ public:
 
 	//! returns a list of all children of the specified type
 	template <class T>
-	std::deque< boost::shared_ptr<T> > getChildren() {
-		std::deque< boost::shared_ptr<T> > result;
+	std::deque< std::shared_ptr<T> > getChildren() {
+		std::deque< std::shared_ptr<T> > result;
 		NodeList::iterator itr;
 		for(itr=mChildren.begin(); itr!=mChildren.end(); ++itr) {
-			boost::shared_ptr<T>  node = boost::dynamic_pointer_cast<T>(*itr); 
+			std::shared_ptr<T>  node = std::dynamic_pointer_cast<T>(*itr); 
 			if(node) result.push_back(node);
 		}
 		return result;
@@ -123,7 +123,7 @@ public:
 	//! removes this node from its parent
 	void removeFromParent();
 	//! puts this node on top of all its siblings
-	void putOnTop();
+	void putOnTop(bool recursive);
 	//! returns wether this node is on top of all its siblings
 	bool isOnTop() const ;		
 	//! puts this node below all its siblings
@@ -259,7 +259,7 @@ private:
 };
 
 // Basic support for OpenGL nodes
-typedef boost::shared_ptr<class NodeGL> NodeGLRef;
+typedef std::shared_ptr<class NodeGL> NodeGLRef;
 
 class NodeGL :
 	public Node
@@ -296,7 +296,7 @@ protected:
 };
 
 // Basic support for 2D nodes
-typedef boost::shared_ptr<class Node2D> Node2DRef;
+typedef std::shared_ptr<class Node2D> Node2DRef;
 
 class Node2D :
 	public NodeGL
@@ -388,7 +388,7 @@ protected:
 };
 
 // Basic support for 3D nodes
-typedef boost::shared_ptr<class Node3D> Node3DRef;
+typedef std::shared_ptr<class Node3D> Node3DRef;
 
 class Node3D :
 	public NodeGL
