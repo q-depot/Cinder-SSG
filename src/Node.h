@@ -27,7 +27,7 @@ namespace cinder {
 	class AxisAlignedBox; 
 	class Camera; class CameraPersp; class CameraStereo; class CameraOrtho;
 	namespace app {
-		class MouseEvent; class KeyEvent; class ResizeEvent; class FileDropEvent;
+		class MouseEvent; class KeyEvent; class ResizeEvent; class FileDropEvent; class TouchEvent;
 	}
 }
 
@@ -181,7 +181,7 @@ public:
 	virtual void update( double elapsed=0.0 ) {}
 	virtual void draw() {}
 
-	// supported events
+	// supported mouse events
 	//! calls the mouseMove() function of this node and all its decendants until a TRUE is passed back
 	bool treeMouseMove( ci::app::MouseEvent event );
 	//! calls the mouseDown() function of this node and all its decendants until a TRUE is passed back
@@ -195,6 +195,19 @@ public:
 	virtual bool mouseDown( ci::app::MouseEvent event );
 	virtual bool mouseDrag( ci::app::MouseEvent event );
 	virtual bool mouseUp( ci::app::MouseEvent event );
+
+	// supported touch events
+	//! calls the touchesBegan() function of this node and all its decendants until a TRUE is passed back
+	bool treeTouchesBegan( ci::app::TouchEvent event );
+	//! calls the touchesMoved() function of this node and all its decendants until a TRUE is passed back
+	bool treeTouchesMoved( ci::app::TouchEvent event );
+	//! calls the touchesEnded() function of this node and all its decendants until a TRUE is passed back
+	bool treeTouchesEnded( ci::app::TouchEvent event );
+
+	virtual bool touchesBegan( ci::app::TouchEvent event );
+	virtual bool touchesMoved( ci::app::TouchEvent event );
+	virtual bool touchesEnded( ci::app::TouchEvent event );
+
 
 	// support for easy picking system
 	virtual bool mouseUpOutside( ci::app::MouseEvent event );

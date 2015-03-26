@@ -326,25 +326,66 @@ bool Node::treeMouseUp( MouseEvent event )
 	return handled;
 }
 
-bool Node::mouseMove( MouseEvent event )
+bool Node::treeTouchesBegan( ci::app::TouchEvent event )
 {
-	return false; 
+	if(!mIsVisible) return false;
+
+	// test children first, from top to bottom
+	NodeList nodes(mChildren);
+	NodeList::reverse_iterator itr;
+	bool handled = false;
+	for(itr=nodes.rbegin();itr!=nodes.rend()&&!handled;++itr)
+		handled = (*itr)->treeTouchesBegan(event);
+
+	// if not handled, test this node
+	if(!handled) handled = touchesBegan(event);
+
+	return handled;
 }
 
-bool Node::mouseDown( MouseEvent event )
+bool Node::treeTouchesMoved( ci::app::TouchEvent event )
 {
-	return false; 
+	if(!mIsVisible) return false;
+
+	// test children first, from top to bottom
+	NodeList nodes(mChildren);
+	NodeList::reverse_iterator itr;
+	bool handled = false;
+	for(itr=nodes.rbegin();itr!=nodes.rend()&&!handled;++itr)
+		handled = (*itr)->treeTouchesMoved(event);
+
+	// if not handled, test this node
+	if(!handled) handled = touchesMoved(event);
+
+	return handled;
 }
 
-bool Node::mouseDrag( MouseEvent event )
+bool Node::treeTouchesEnded( ci::app::TouchEvent event )
 {
-	return false; 
-}
+	if(!mIsVisible) return false;
 
-bool Node::mouseUp( MouseEvent event )
-{
-	return false; 
+	// test children first, from top to bottom
+	NodeList nodes(mChildren);
+	NodeList::reverse_iterator itr;
+	bool handled = false;
+	for(itr=nodes.rbegin();itr!=nodes.rend()&&!handled;++itr)
+		(*itr)->treeTouchesEnded(event); // don't care about 'handled' for now
+
+	// if not handled, test this node
+	if(!handled) handled = touchesEnded(event);
+
+	return handled;
 }
+	
+
+bool Node::mouseMove( MouseEvent event )				{ return false; }
+bool Node::mouseDown( MouseEvent event )				{ return false; }
+bool Node::mouseDrag( MouseEvent event )				{ return false; }
+bool Node::mouseUp( MouseEvent event )					{ return false; }
+
+bool Node::touchesBegan( ci::app::TouchEvent event )	{ return false; }
+bool Node::touchesMoved( ci::app::TouchEvent event )	{ return false; }
+bool Node::touchesEnded( ci::app::TouchEvent event )	{ return false; }
 
 bool Node::mouseUpOutside( MouseEvent event )
 {
